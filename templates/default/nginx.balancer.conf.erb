@@ -10,8 +10,16 @@ upstream <%= app[:name] %>-load_balancer {
 }
 
 server {
-  listen 80;
   server_name <%= app[:url] %>;
+
+<% if node[:application][:ssl][:enabled] %>
+  <%= 'listen 80;' unless node[:application][:ssl][:force] %>
+  listen 443 ssl;
+  ssl_certificate         /etc/nginx/ssl/<%= node[:application][:ssl][:cert_name] %>.crt;
+  ssl_certificate_key     /etc/nginx/ssl/<%= node[:application][:ssl][:cert_name] %>.key;
+<% else %>
+  listen 80;
+<% end %>
 
   location / {
     proxy_pass http://<%= app[:name] %>-load_balancer;
