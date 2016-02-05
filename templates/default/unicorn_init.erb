@@ -1,7 +1,7 @@
 #!/bin/bash --login
 
 PID=<%= app.run_path %>/unicorn.pid
-CMD="dotenv bundle exec unicorn_rails -c config/unicorn.rb"
+CMD="bundle exec dotenv unicorn_rails -c config/unicorn.rb"
 
 if [ `whoami` != "<%= app.user.name %>" ]; then
 echo >&2 "Must be run by user '<%= app.user.name %>'." && exit 1
